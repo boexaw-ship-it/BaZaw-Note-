@@ -29,46 +29,48 @@ const Apartments = {
 
     tbody.innerHTML = this.data.map(row => `
       <tr>
-        <td>${row['ခန်းနံပါတ်'] || '-'}</td>
+        <td>${row['တိုက်ခန်း'] || row['ခန်းနံပါတ်'] || '-'}</td>
         <td>${row['အငှားရသူ'] || '-'}</td>
         <td class="text-right" style="color:var(--gold);font-weight:600;">
-          ${formatMoney(row['အငှားနှုန်း'])} ကျပ်
+          ${formatMoney(row['လချုပ်ကြေး'] || row['အငှားနှုန်း'])} ကျပ်
         </td>
-        <td class="text-right" style="color:var(--green);font-weight:600;">
-          ${formatMoney(row['စုထားသောငွေ'])} ကျပ်
-        </td>
-        <td>${row['ရက်စွဲ'] || '-'}</td>
+        <td>${row['Start Date'] || '-'}</td>
+        <td>${row['End Date'] || '-'}</td>
         <td>${row['မှတ်ချက်'] || '-'}</td>
       </tr>`).join('');
   },
 
   updateSummary() {
-    const totalRent    = this.data.reduce((s, r) => s + toNum(r['အငှားနှုန်း']), 0);
-    const totalSaved   = this.data.reduce((s, r) => s + toNum(r['စုထားသောငွေ']), 0);
-    const totalUnits   = this.data.length;
+    const totalRent = this.data.reduce((s, r) => s + toNum(r['လချုပ်ကြေး'] || r['အငှားနှုန်း']), 0);
+    const totalUnits = this.data.length;
 
-    setEl('apt-total-rent',  formatMoney(totalRent)  + ' ကျပ်');
-    setEl('apt-total-saved', formatMoney(totalSaved) + ' ကျပ်');
+    setEl('apt-total-rent', formatMoney(totalRent) + ' ကျပ်');
     setEl('apt-total-units', totalUnits + ' ခန်း');
+    setEl('apt-active-contracts', totalUnits + ' ခု');
   },
 
   async submit() {
     const f = {
-      room:    val('apt-room'),
-      rent:    val('apt-rent'),
-      saved:   val('apt-saved'),
-      tenant:  val('apt-tenant'),
-      date:    val('apt-date'),
-      note:    val('apt-note'),
+      room: val('apt-room'),
+      tenant: val('apt-tenant'),
+      rent: val('apt-rent'),
+      startDate: val('apt-start-date'),
+      endDate: val('apt-end-date'),
+      note: val('apt-note'),
     };
 
-    if (!f.room || !f.rent || !f.date) {
+    if (!f.room || !f.rent || !f.startDate || !f.endDate) {
       showToast('ဖြည့်ရမည့် အချက်များ ဖြည့်ပါ ⚠️'); return;
     }
 
     showToast('သိမ်းဆည်းနေသည်... ⏳');
     const result = await API.addRow('Apartments', [
-      f.room, f.rent, f.saved, f.tenant, f.date, f.note
+      f.room,
+      f.tenant,
+      f.rent,
+      f.startDate,
+      f.endDate,
+      f.note
     ]);
 
     if (result && result.status === 'ok') {
