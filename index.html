@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>BaZaw Note</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ── Header ── -->
+<header class="app-header">
+  <div class="app-header-icon">📒</div>
+  <div class="app-header-text">
+    <h1>BAZAW NOTE</h1>
+    <p>Business Management System</p>
+  </div>
+</header>
+
+<!-- ── Navigation ── -->
+<nav class="nav-tabs">
+  <button class="nav-tab active" data-page="apartments" onclick="switchPage('apartments')">
+    <span class="tab-icon">🏢</span>တိုက်ခန်း
+  </button>
+  <button class="nav-tab" data-page="goods" onclick="switchPage('goods')">
+    <span class="tab-icon">📦</span>ပစ္စည်း
+  </button>
+  <button class="nav-tab" data-page="finance" onclick="switchPage('finance')">
+    <span class="tab-icon">💰</span>ငွေစာရင်း
+  </button>
+  <button class="nav-tab" data-page="property" onclick="switchPage('property')">
+    <span class="tab-icon">🏠</span>အိမ်/ကား
+  </button>
+</nav>
+
+<!-- ════════════════════════════════════════════
+     PAGE 1 : တိုက်ခန်းအငှား
+════════════════════════════════════════════ -->
+<div class="page active" id="page-apartments">
+
+  <!-- Summary -->
+  <div class="summary-grid">
+    <div class="summary-card gold">
+      <span class="icon">🏢</span>
+      <div class="label">အငှားစုစုပေါင်း</div>
+      <div class="amount gold" id="apt-total-rent">— ကျပ်</div>
+    </div>
+    <div class="summary-card green">
+      <span class="icon">💵</span>
+      <div class="label">စုထားသောငွေ</div>
+      <div class="amount green" id="apt-total-saved">— ကျပ်</div>
+    </div>
+    <div class="summary-card" style="grid-column:1/-1;">
+      <span class="icon">🔑</span>
+      <div class="label">ခန်းအရေအတွက်</div>
+      <div class="amount" id="apt-total-units">—</div>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="section-header">
+    <span class="section-title">တိုက်ခန်းစာရင်း</span>
+    <button class="btn-add" onclick="openModal('apt-modal')">＋ ဖြည့်မည်</button>
+  </div>
+
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>ခန်းနံပါတ်</th>
+          <th>အငှားရသူ</th>
+          <th>အငှားနှုန်း</th>
+          <th>စုထားငွေ</th>
+          <th>ရက်စွဲ</th>
+          <th>မှတ်ချက်</th>
+        </tr>
+      </thead>
+      <tbody id="apt-tbody">
+        <tr><td colspan="6">
+          <div class="empty-state">
+            <span class="empty-icon">🏢</span>
+            <p>စာရင်း မရှိသေးပါ</p>
+          </div>
+        </td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal: Apartment -->
+<div class="modal-overlay" id="apt-modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">🏢 တိုက်ခန်းစာရင်း ဖြည့်မည်</div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>ခန်းနံပါတ် *</label>
+        <input type="text" id="apt-room" placeholder="A-101">
+      </div>
+      <div class="form-group">
+        <label>ရက်စွဲ *</label>
+        <input type="date" id="apt-date">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>အငှားရသူ အမည်</label>
+      <input type="text" id="apt-tenant" placeholder="ဦး/မ...">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>အငှားနှုန်း (ကျပ်) *</label>
+        <input type="number" id="apt-rent" placeholder="0">
+      </div>
+      <div class="form-group">
+        <label>စုထားသောငွေ (ကျပ်)</label>
+        <input type="number" id="apt-saved" placeholder="0">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>မှတ်ချက်</label>
+      <input type="text" id="apt-note" placeholder="...">
+    </div>
+
+    <button class="btn-submit" onclick="Apartments.submit()">✓ သိမ်းဆည်းမည်</button>
+    <button class="btn-cancel" onclick="closeModal('apt-modal')">ပယ်ဖျက်မည်</button>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════
+     PAGE 2 : ပစ္စည်းအဝယ်အရောင်း
+════════════════════════════════════════════ -->
+<div class="page" id="page-goods">
+
+  <div class="summary-grid">
+    <div class="summary-card red">
+      <span class="icon">🛒</span>
+      <div class="label">အဝယ်စုစုပေါင်း</div>
+      <div class="amount red" id="goods-total-buy">— ကျပ်</div>
+    </div>
+    <div class="summary-card green">
+      <span class="icon">💼</span>
+      <div class="label">အရောင်းစုစုပေါင်း</div>
+      <div class="amount green" id="goods-total-sell">— ကျပ်</div>
+    </div>
+    <div class="summary-card gold" style="grid-column:1/-1;">
+      <span class="icon">📈</span>
+      <div class="label">အမြတ်/အရှုံး</div>
+      <div class="amount gold" id="goods-total-profit">— ကျပ်</div>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <span class="section-title">ပစ္စည်းစာရင်း</span>
+    <button class="btn-add" onclick="openModal('goods-modal')">＋ ဖြည့်မည်</button>
+  </div>
+
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>ပစ္စည်းအမည်</th>
+          <th>အမျိုးအစား</th>
+          <th>ပမာဏ</th>
+          <th>တန်ဖိုး</th>
+          <th>အဝယ်/အရောင်း</th>
+          <th>ရက်စွဲ</th>
+        </tr>
+      </thead>
+      <tbody id="goods-tbody">
+        <tr><td colspan="6">
+          <div class="empty-state">
+            <span class="empty-icon">📦</span>
+            <p>စာရင်း မရှိသေးပါ</p>
+          </div>
+        </td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal: Goods -->
+<div class="modal-overlay" id="goods-modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">📦 ပစ္စည်းစာရင်း ဖြည့်မည်</div>
+
+    <div class="form-group">
+      <label>ပစ္စည်းအမည် *</label>
+      <input type="text" id="goods-name" placeholder="ပစ္စည်းအမည်...">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>အမျိုးအစား</label>
+        <input type="text" id="goods-cat" placeholder="ဥပမာ- အိမ်သုံး">
+      </div>
+      <div class="form-group">
+        <label>ပမာဏ</label>
+        <input type="text" id="goods-qty" placeholder="1">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>တန်ဖိုး (ကျပ်) *</label>
+        <input type="number" id="goods-price" placeholder="0">
+      </div>
+      <div class="form-group">
+        <label>အမျိုးအစား *</label>
+        <select id="goods-type">
+          <option value="အဝယ်">အဝယ်</option>
+          <option value="အရောင်း">အရောင်း</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>ရက်စွဲ *</label>
+      <input type="date" id="goods-date">
+    </div>
+    <div class="form-group">
+      <label>မှတ်ချက်</label>
+      <input type="text" id="goods-note" placeholder="...">
+    </div>
+
+    <button class="btn-submit" onclick="Goods.submit()">✓ သိမ်းဆည်းမည်</button>
+    <button class="btn-cancel" onclick="closeModal('goods-modal')">ပယ်ဖျက်မည်</button>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════
+     PAGE 3 : ငွေအဝင်အထွက်
+════════════════════════════════════════════ -->
+<div class="page" id="page-finance">
+
+  <div class="summary-grid">
+    <div class="summary-card green">
+      <span class="icon">⬇️</span>
+      <div class="label">ငွေဝင်စုစုပေါင်း</div>
+      <div class="amount green" id="fin-total-in">— ကျပ်</div>
+    </div>
+    <div class="summary-card red">
+      <span class="icon">⬆️</span>
+      <div class="label">ငွေထွက်စုစုပေါင်း</div>
+      <div class="amount red" id="fin-total-out">— ကျပ်</div>
+    </div>
+    <div class="summary-card" style="grid-column:1/-1;">
+      <span class="icon">💳</span>
+      <div class="label">လက်ကျန်ငွေ</div>
+      <div class="amount" id="fin-balance">— ကျပ်</div>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <span class="section-title">ငွေစာရင်း</span>
+    <button class="btn-add" onclick="openModal('fin-modal')">＋ ဖြည့်မည်</button>
+  </div>
+
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>အမျိုးအစား</th>
+          <th>ပမာဏ</th>
+          <th>ရင်းမြစ်</th>
+          <th>ရက်စွဲ</th>
+          <th>မှတ်ချက်</th>
+        </tr>
+      </thead>
+      <tbody id="finance-tbody">
+        <tr><td colspan="5">
+          <div class="empty-state">
+            <span class="empty-icon">💰</span>
+            <p>စာရင်း မရှိသေးပါ</p>
+          </div>
+        </td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal: Finance -->
+<div class="modal-overlay" id="fin-modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">💰 ငွေစာရင်း ဖြည့်မည်</div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>အမျိုးအစား *</label>
+        <select id="fin-type">
+          <option value="ငွေဝင်">ငွေဝင်</option>
+          <option value="ငွေထွက်">ငွေထွက်</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>ရက်စွဲ *</label>
+        <input type="date" id="fin-date">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>ငွေပမာဏ (ကျပ်) *</label>
+      <input type="number" id="fin-amount" placeholder="0">
+    </div>
+    <div class="form-group">
+      <label>ရင်းမြစ်</label>
+      <input type="text" id="fin-source" placeholder="ဥပမာ- တိုက်ခန်းအငှား">
+    </div>
+    <div class="form-group">
+      <label>မှတ်ချက်</label>
+      <input type="text" id="fin-note" placeholder="...">
+    </div>
+
+    <button class="btn-submit" onclick="Finance.submit()">✓ သိမ်းဆည်းမည်</button>
+    <button class="btn-cancel" onclick="closeModal('fin-modal')">ပယ်ဖျက်မည်</button>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════
+     PAGE 4 : တိုက်/အိမ်/ကားအရောင်းအဝယ်
+════════════════════════════════════════════ -->
+<div class="page" id="page-property">
+
+  <div class="summary-grid">
+    <div class="summary-card red">
+      <span class="icon">🛍️</span>
+      <div class="label">အဝယ်စုစုပေါင်း</div>
+      <div class="amount red" id="prop-total-buy">— ကျပ်</div>
+    </div>
+    <div class="summary-card green">
+      <span class="icon">🤝</span>
+      <div class="label">အရောင်းစုစုပေါင်း</div>
+      <div class="amount green" id="prop-total-sell">— ကျပ်</div>
+    </div>
+    <div class="summary-card gold" style="grid-column:1/-1;">
+      <span class="icon">📊</span>
+      <div class="label">အမြတ်/အရှုံး</div>
+      <div class="amount gold" id="prop-net">— ကျပ်</div>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <span class="section-title">ပိုင်ဆိုင်မှုစာရင်း</span>
+    <button class="btn-add" onclick="openModal('prop-modal')">＋ ဖြည့်မည်</button>
+  </div>
+
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>အမျိုးအစား</th>
+          <th>ဖော်ပြချက်</th>
+          <th>တန်ဖိုး</th>
+          <th>အဝယ်/အရောင်း</th>
+          <th>ရက်စွဲ</th>
+        </tr>
+      </thead>
+      <tbody id="prop-tbody">
+        <tr><td colspan="5">
+          <div class="empty-state">
+            <span class="empty-icon">🏠</span>
+            <p>စာရင်း မရှိသေးပါ</p>
+          </div>
+        </td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal: Property -->
+<div class="modal-overlay" id="prop-modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">🏠 ပိုင်ဆိုင်မှုစာရင်း ဖြည့်မည်</div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>အမျိုးအစား *</label>
+        <select id="prop-type">
+          <option value="တိုက်ခန်း">တိုက်ခန်း</option>
+          <option value="အိမ်">အိမ်</option>
+          <option value="ကား">ကား</option>
+          <option value="မြေ">မြေ</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>အဝယ်/အရောင်း *</label>
+        <select id="prop-deal">
+          <option value="အဝယ်">အဝယ်</option>
+          <option value="အရောင်း">အရောင်း</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>ဖော်ပြချက်</label>
+      <input type="text" id="prop-desc" placeholder="ဥပမာ- Yankin မြို့နယ်...">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>တန်ဖိုး (ကျပ်) *</label>
+        <input type="number" id="prop-price" placeholder="0">
+      </div>
+      <div class="form-group">
+        <label>ရက်စွဲ *</label>
+        <input type="date" id="prop-date">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>မှတ်ချက်</label>
+      <input type="text" id="prop-note" placeholder="...">
+    </div>
+
+    <button class="btn-submit" onclick="Property.submit()">✓ သိမ်းဆည်းမည်</button>
+    <button class="btn-cancel" onclick="closeModal('prop-modal')">ပယ်ဖျက်မည်</button>
+  </div>
+</div>
+
+
+<!-- ── Toast ── -->
+<div class="toast" id="toast"></div>
+
+<!-- ── Scripts ── -->
+<script src="js/api.js"></script>
+<script src="js/apartments.js"></script>
+<script src="js/goods.js"></script>
+<script src="js/finance.js"></script>
+<script src="js/property.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>
