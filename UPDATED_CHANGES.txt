@@ -1,0 +1,19 @@
+Updated Changes
+=================
+
+1. Apartment section changed to rental-only management.
+2. Removed saved money field from apartment page.
+3. Added:
+   - Apartment / Room
+   - Monthly Contract Fee
+   - Start Date
+   - End Date
+4. Updated apartment summary cards.
+5. Updated apartment table columns.
+6. Updated apartment form inputs.
+7. Updated apartments.js submit and render logic.
+
+Note:
+You also need to update your Google Sheet column order to:
+
+တိုက်ခန်း | အငှားရသူ | လချုပ်ကြေး | Start Date | End Date | မှတ်ချက်
