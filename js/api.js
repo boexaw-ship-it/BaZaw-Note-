@@ -1,19 +1,48 @@
 // ══════════════════════════════════════════════
-//  api.js  —  Google Sheets connector
+//  api.js — JSONP method (CORS ကျော်မည်)
 // ══════════════════════════════════════════════
 
 const API = {
-  SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbwMwybSrVxr2W-19U2hnvqvoYFKInNvNTR4EFvyKdRwefRTr3CdklCbthqbK_fL-cfmGg/exec',
+  SCRIPT_URL: 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE',
 
-  // GET — no-cors မသုံးဘူး၊ redirect follow လုပ်မည်
+  // JSONP helper — script tag သုံးမည်
+  _jsonp(url) {
+    return new Promise((resolve, reject) => {
+      const cbName = '_cb_' + Date.now();
+      const script = document.createElement('script');
+
+      window[cbName] = (data) => {
+        resolve(data);
+        delete window[cbName];
+        script.remove();
+      };
+
+      script.onerror = () => {
+        reject(new Error('JSONP failed'));
+        delete window[cbName];
+        script.remove();
+      };
+
+      script.src = url + '&callback=' + cbName;
+      document.head.appendChild(script);
+
+      setTimeout(() => {
+        if (window[cbName]) {
+          reject(new Error('JSONP timeout'));
+          delete window[cbName];
+          script.remove();
+        }
+      }, 10000);
+    });
+  },
+
+  // GET — JSONP သုံးမည်
   async getAll() {
     try {
-      const url = this.SCRIPT_URL + '?action=getAll';
-      const res = await fetch(url, {
-        redirect: 'follow'
-      });
-      const json = await res.json();
-      return json.data || {};
+      const res = await this._jsonp(
+        this.SCRIPT_URL + '?action=getAll'
+      );
+      return res.data || {};
     } catch (e) {
       console.error('GET error:', e);
       showToast('ချိတ်ဆက်မှု မအောင်မြင်ဘူး ❌');
@@ -21,17 +50,17 @@ const API = {
     }
   },
 
-  // POST — no-cors သုံးမည် (CORS bypass)
+  // POST — JSONP နဲ့ GET param သုံးမည်
   async addRow(sheet, row) {
     try {
-      await fetch(this.SCRIPT_URL, {
-        method:  'POST',
-        mode:    'no-cors',
-        body:    JSON.stringify({ sheet, row })
-      });
-      // no-cors မှာ response မဖတ်နိုင်ဘူး — 2s စောင့်ပြီး reload
-      await new Promise(r => setTimeout(r, 2000));
-      return { status: 'ok' };
+      const rowJson = encodeURIComponent(JSON.stringify(row));
+      const url = this.SCRIPT_URL
+        + '?action=addRow'
+        + '&sheet=' + encodeURIComponent(sheet)
+        + '&row='   + rowJson;
+
+      const res = await this._jsonp(url);
+      return res;
     } catch (e) {
       console.error('POST error:', e);
       showToast('သိမ်းဆည်း မအောင်မြင်ဘူး ❌');
