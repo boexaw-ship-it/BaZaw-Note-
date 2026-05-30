@@ -4,7 +4,7 @@
 // ══════════════════════════════════════════════
 
 const API = {
-  SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbzVO34eS4Hc_1lmhJW5mBblAJombYNTi5eDJU15ald77Vau5LkVV-vgWY7bgQQUezYGlw/exec',
+  SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbzp7WR8i1tePKibiD34voJoKnVmuX4BxPVSoxyUGsENaZV8vl2G0XblrBgccgocwZq7Ug/exec',
 
   async getAll() {
     try {
