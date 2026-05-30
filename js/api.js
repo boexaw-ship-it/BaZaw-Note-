@@ -3,7 +3,7 @@
 // ══════════════════════════════════════════════
 
 const API = {
-  SCRIPT_URL: 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE',
+  SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbxN17kWzZlZBQejzhpTvWfXJz7xXP0P_2x0vnWif9V3_-U3pdtUbs7Spzsb09QQ-RV2eg/exec',
 
   async getAll() {
     try {
