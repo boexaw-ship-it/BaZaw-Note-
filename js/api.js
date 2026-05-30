@@ -3,7 +3,7 @@
 // ══════════════════════════════════════════════
 
 const API = {
-  SCRIPT_URL: 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE',
+  SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbwMwybSrVxr2W-19U2hnvqvoYFKInNvNTR4EFvyKdRwefRTr3CdklCbthqbK_fL-cfmGg/exec',
 
   // GET — no-cors မသုံးဘူး၊ redirect follow လုပ်မည်
   async getAll() {
