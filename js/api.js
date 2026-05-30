@@ -3,13 +3,14 @@
 // ══════════════════════════════════════════════
 
 const API = {
-  SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbxN17kWzZlZBQejzhpTvWfXJz7xXP0P_2x0vnWif9V3_-U3pdtUbs7Spzsb09QQ-RV2eg/exec',
+  SCRIPT_URL: 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE',
 
+  // GET — no-cors မသုံးဘူး၊ redirect follow လုပ်မည်
   async getAll() {
     try {
-      const res  = await fetch(`${this.SCRIPT_URL}?action=getAll`, {
-        method: 'GET',
-        mode: 'cors'
+      const url = this.SCRIPT_URL + '?action=getAll';
+      const res = await fetch(url, {
+        redirect: 'follow'
       });
       const json = await res.json();
       return json.data || {};
@@ -20,19 +21,17 @@ const API = {
     }
   },
 
+  // POST — no-cors သုံးမည် (CORS bypass)
   async addRow(sheet, row) {
     try {
-      const res  = await fetch(this.SCRIPT_URL, {
+      await fetch(this.SCRIPT_URL, {
         method:  'POST',
-        mode:    'no-cors',        // ← ဒါပဲ POST အတွက် အလုပ်ဖြစ်တယ်
-        headers: { 'Content-Type': 'application/json' },
+        mode:    'no-cors',
         body:    JSON.stringify({ sheet, row })
       });
-
-      // no-cors မှာ response ဖတ်လို့မရဘူး — အောင်မြင်သည်ဟု ယူဆ
-      showToast('သိမ်းဆည်းပြီး ✅');
+      // no-cors မှာ response မဖတ်နိုင်ဘူး — 2s စောင့်ပြီး reload
+      await new Promise(r => setTimeout(r, 2000));
       return { status: 'ok' };
-
     } catch (e) {
       console.error('POST error:', e);
       showToast('သိမ်းဆည်း မအောင်မြင်ဘူး ❌');
