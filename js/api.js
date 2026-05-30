@@ -1,14 +1,16 @@
 // ══════════════════════════════════════════════
 //  api.js  —  Google Sheets connector
-//  URL ရပြီဆိုရင် SCRIPT_URL ထဲ ထည့်ပါ
 // ══════════════════════════════════════════════
 
 const API = {
-  SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbyb3MJQ1xfP_fTZ_ziwimjiwLE-L7boA8TsXqlMPn4nArqG7KGvJnc7aMs9qsbgV5_CJg/exec',
+  SCRIPT_URL: 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE',
 
   async getAll() {
     try {
-      const res = await fetch(`${this.SCRIPT_URL}?action=getAll`);
+      const res  = await fetch(`${this.SCRIPT_URL}?action=getAll`, {
+        method: 'GET',
+        mode: 'cors'
+      });
       const json = await res.json();
       return json.data || {};
     } catch (e) {
@@ -20,12 +22,17 @@ const API = {
 
   async addRow(sheet, row) {
     try {
-      const res = await fetch(this.SCRIPT_URL, {
-        method: 'POST',
-        body: JSON.stringify({ sheet, row })
+      const res  = await fetch(this.SCRIPT_URL, {
+        method:  'POST',
+        mode:    'no-cors',        // ← ဒါပဲ POST အတွက် အလုပ်ဖြစ်တယ်
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ sheet, row })
       });
-      const json = await res.json();
-      return json;
+
+      // no-cors မှာ response ဖတ်လို့မရဘူး — အောင်မြင်သည်ဟု ယူဆ
+      showToast('သိမ်းဆည်းပြီး ✅');
+      return { status: 'ok' };
+
     } catch (e) {
       console.error('POST error:', e);
       showToast('သိမ်းဆည်း မအောင်မြင်ဘူး ❌');
