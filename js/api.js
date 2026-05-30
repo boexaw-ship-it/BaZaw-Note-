@@ -3,7 +3,7 @@
 // ══════════════════════════════════════════════
 
 const API = {
-  SCRIPT_URL: 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE',
+  SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbwzca3XnyhfTa7JnGOEPPtdPXyD7crKbgNz3jjW5Kge_bzYWIFEHQZT5EYzt7jl7-wQsw/exec',
 
   // JSONP helper — script tag သုံးမည်
   _jsonp(url) {
