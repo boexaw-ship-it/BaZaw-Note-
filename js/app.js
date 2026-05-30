@@ -35,7 +35,8 @@ const pageModules = {
   apartments: Apartments,
   goods:      Goods,
   finance:    Finance,
-  property:   Property
+  property:   Property,
+  bank:       Bank
 };
 
 function switchPage(name) {
